@@ -1,21 +1,40 @@
 "use client";
-import { useState } from 'react';
-import { PlayerBadge } from './PlayerBadge';
+import Image from "next/image";
+import { useState } from "react";
+import { PlayerBadge } from "./PlayerBadge";
 
-export const MatchCard = ({ homeTeam, awayTeam, sharedPlayers, competition }: any) => {
+type MatchCardProps = {
+  homeTeam: string;
+  awayTeam: string;
+  homeLogo: string;
+  awayLogo: string;
+  sharedPlayers: string[];
+  competition: string;
+};
+
+export const MatchCard = ({
+  homeTeam,
+  awayTeam,
+  homeLogo,
+  awayLogo,
+  sharedPlayers,
+  competition,
+}: MatchCardProps) => {
   const [isRevealed, setIsRevealed] = useState(false);
 
   return (
-    <div 
+    <div
       onClick={() => setIsRevealed(true)}
-      className="group relative bg-[#121212] border border-slate-800 rounded-3xl p-6 transition-all hover:bg-[#161616] hover:border-slate-700 flex flex-col h-full"
+      className="group relative bg-slate-100 border border-slate-200 rounded-3xl p-6 transition-all hover:bg-slate-50 hover:border-slate-300 flex flex-col h-full"
     >
       <div className="flex flex-col mb-8">
-        <span className="text-[9px] font-black text-slate-600 uppercase tracking-[0.2em] mb-2">{competition}</span>
-        <div className="flex items-center justify-between">
-          <div className="text-2xl font-black italic uppercase tracking-tighter">{homeTeam}</div>
+        <span className="text-[9px] font-black text-slate-600 uppercase tracking-[0.2em] mb-2">
+          {competition}
+        </span>
+        <div className="mt-4 flex items-center justify-between">
+          <Image src={homeLogo} alt={`${homeTeam} logo`} width={44} height={44} />
           <div className="text-[10px] font-bold text-slate-800 italic">VS</div>
-          <div className="text-2xl font-black italic uppercase tracking-tighter text-right">{awayTeam}</div>
+          <Image src={awayLogo} alt={`${awayTeam} logo`} width={44} height={44} />
         </div>
       </div>
 
@@ -30,7 +49,7 @@ export const MatchCard = ({ homeTeam, awayTeam, sharedPlayers, competition }: an
           <>
             {sharedPlayers.length > 0 ? (
               <div className="flex flex-wrap gap-2 animate-in fade-in slide-in-from-bottom-2 duration-500">
-                {sharedPlayers.map((p: string) => (
+                {sharedPlayers.map((p) => (
                   <PlayerBadge key={p} name={p} />
                 ))}
               </div>

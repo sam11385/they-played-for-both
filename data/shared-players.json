@@ -1,3 +1,27 @@
 {
-    "CHE-LEE": ["Patrick Bamford", "Tyler Adams", "Jack Harrison", "Jimmy Floyd Hasselbaink"]
+  "2026-04-26": [
+    {
+      "homeTeam": "CHE",
+      "awayTeam": "LEE",
+      "competition": "Premier League",
+      "homeLogo": "https://media.api-sports.io/football/teams/49.png",
+      "awayLogo": "https://media.api-sports.io/football/teams/63.png",
+      "sharedPlayers": [
+        "Patrick Bamford",
+        "Tyler Adams",
+        "Jack Harrison",
+        "Jimmy Floyd Hasselbaink"
+      ]
+    }
+  ],
+  "2026-04-27": [
+    {
+      "homeTeam": "ARS",
+      "awayTeam": "TOT",
+      "competition": "Premier League",
+      "homeLogo": "https://media.api-sports.io/football/teams/42.png",
+      "awayLogo": "https://media.api-sports.io/football/teams/47.png",
+      "sharedPlayers": ["Sol Campbell", "Emmanuel Adebayor", "William Gallas"]
+    }
+  ]
 }

@@ -3,6 +3,8 @@ import { MatchCard } from './MatchCard';
 type Match = {
   homeTeam: string;
   awayTeam: string;
+  homeLogo: string;
+  awayLogo: string;
   sharedPlayers: string[];
   competition: string;
 };
@@ -16,6 +18,8 @@ export const MatchGrid = ({ matches }: { matches: Match[] }) => {
           key={`${match.homeTeam}-${match.awayTeam}-${match.competition}`}
           homeTeam={match.homeTeam}
           awayTeam={match.awayTeam}
+          homeLogo={match.homeLogo}
+          awayLogo={match.awayLogo}
           sharedPlayers={match.sharedPlayers}
           competition={match.competition}
         />
