@@ -27,9 +27,19 @@ export const MatchCard = ({ homeTeam, awayTeam, sharedPlayers, competition }: an
             </span>
           </div>
         ) : (
-          <div className="flex flex-wrap gap-2 animate-in fade-in slide-in-from-bottom-2 duration-500">
-            {sharedPlayers.map((p: string) => <PlayerBadge key={p} name={p} />)}
-          </div>
+          <>
+            {sharedPlayers.length > 0 ? (
+              <div className="flex flex-wrap gap-2 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                {sharedPlayers.map((p: string) => (
+                  <PlayerBadge key={p} name={p} />
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm font-medium text-slate-400 animate-in fade-in duration-300">
+                No known shared legends
+              </p>
+            )}
+          </>
         )}
       </div>
     </div>
