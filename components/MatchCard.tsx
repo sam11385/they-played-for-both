@@ -25,16 +25,16 @@ export const MatchCard = ({
   return (
     <div
       onClick={() => setIsRevealed(true)}
-      className="group relative bg-slate-100 border border-slate-200 rounded-3xl p-6 transition-all hover:bg-slate-50 hover:border-slate-300 flex flex-col h-full"
+      className="group relative bg-slate-900/60 backdrop-blur-md border border-white/5 rounded-3xl p-6 transition-all hover:border-blue-500/30 flex flex-col h-full"
     >
       <div className="flex flex-col mb-8">
         <span className="text-[9px] font-black text-slate-600 uppercase tracking-[0.2em] mb-2">
           {competition}
         </span>
         <div className="mt-4 flex items-center justify-between">
-          <Image src={homeLogo} alt={`${homeTeam} logo`} width={44} height={44} />
+          <Image src={homeLogo} alt={`${homeTeam} logo`} width={44} height={44} loading="lazy" />
           <div className="text-[10px] font-bold text-slate-800 italic">VS</div>
-          <Image src={awayLogo} alt={`${awayTeam} logo`} width={44} height={44} />
+          <Image src={awayLogo} alt={`${awayTeam} logo`} width={44} height={44} loading="lazy" />
         </div>
       </div>
 
