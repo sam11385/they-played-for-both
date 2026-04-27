@@ -2,8 +2,7 @@
 
 import Header from "@/components/Header";
 import { MatchGrid } from "@/components/MatchGrid";
-import sharedPlayersByDate from "@/data/shared-players.json";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 type Match = {
   homeTeam: string;
   awayTeam: string;
@@ -12,16 +11,50 @@ type Match = {
   sharedPlayers: string[];
   competition: string;
 };
-type MatchesByDate = Record<string, Match[]>;
 
 export default function Home() {
-  const [selectedDate, setSelectedDate] = useState(() =>
-    new Date().toISOString().split("T")[0],
-  );
-  const [showCalendar, setShowCalendar] = useState(false);
-  const matchesForSelectedDate =
-    (sharedPlayersByDate as MatchesByDate)[selectedDate] ?? [];
-  const formattedSelectedDate = new Date(`${selectedDate}T00:00:00`).toLocaleDateString(
+  const todayDate = new Date().toISOString().split("T")[0];
+  const [matchesForSelectedDate, setMatchesForSelectedDate] = useState<Match[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    const fetchMatches = async () => {
+      setIsLoading(true);
+      setLoadError(null);
+
+      try {
+        const response = await fetch(`/api/matches?date=${todayDate}`);
+        if (!response.ok) {
+          throw new Error("Unable to load matches right now.");
+        }
+
+        const data = (await response.json()) as { matches: Match[] };
+        if (!isCancelled) {
+          setMatchesForSelectedDate(data.matches ?? []);
+        }
+      } catch (error) {
+        if (!isCancelled) {
+          setMatchesForSelectedDate([]);
+          setLoadError(error instanceof Error ? error.message : "Unable to load matches right now.");
+        }
+      } finally {
+        if (!isCancelled) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    void fetchMatches();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [todayDate]);
+
+  const formattedSelectedDate = new Date(`${todayDate}T00:00:00`).toLocaleDateString(
     "en-GB",
   );
 
@@ -32,36 +65,19 @@ export default function Home() {
       <div className="relative z-10 flex w-full flex-1 flex-col items-center">
         <Header />
         <main className="flex w-full max-w-5xl flex-1 flex-col gap-6 px-6 py-10">
-          <div className="flex items-center justify-between px-4">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-100">
-              Today&apos;s Matches
-            </h1>
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setShowCalendar((prev) => !prev)}
-                className="text-sm font-semibold text-blue-300 underline-offset-4 transition hover:underline"
-              >
-                Select day
-              </button>
-              {showCalendar ? (
-                <div className="absolute right-0 z-10 mt-2 rounded-xl border border-white/10 bg-slate-900 p-3 shadow-lg">
-                  <input
-                    type="date"
-                    value={selectedDate}
-                    onChange={(event) => setSelectedDate(event.target.value)}
-                    className="rounded-md border border-slate-600 bg-slate-800 px-2 py-1 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-              ) : null}
-            </div>
+          <div className="px-4">
+            <h1 className="text-2xl font-bold tracking-tight text-slate-100">Today&apos;s Matches</h1>
           </div>
           <p className="px-4 text-sm text-slate-300">Viewing matches for {formattedSelectedDate}</p>
-          {matchesForSelectedDate.length > 0 ? (
+          {isLoading ? (
+            <p className="px-4 text-sm font-medium text-slate-300">Loading matches...</p>
+          ) : loadError ? (
+            <p className="px-4 text-sm font-medium text-red-300">{loadError}</p>
+          ) : matchesForSelectedDate.length > 0 ? (
             <MatchGrid matches={matchesForSelectedDate} />
           ) : (
             <p className="px-4 text-sm font-medium text-slate-300">
-              No matches available for this date yet.
+              No matches available for this date.
             </p>
           )}
         </main>
